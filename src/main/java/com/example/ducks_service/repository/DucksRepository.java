@@ -18,29 +18,34 @@ import java.util.Objects;
 public class DucksRepository {
     private static final String NEW_LINE = System.lineSeparator();
 
-    private static final String DATABASE_NAME = "db.txt";
+    private final Path DATABASE_NAME;
 
     private static final String imagePath = "ducks/images/";
     private static final String audioPath = "ducks/audio/";
+
+    public DucksRepository() {
+        this.DATABASE_NAME = Paths.get("db.txt");  // Default
+    }
+
+    public DucksRepository(Path databasePath) {
+        this.DATABASE_NAME = databasePath;
+    }
 
     private static void appendToFile(Path path, String content) throws IOException{
         Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     }
 
     public boolean addDuck(Duck duck) throws IOException{
-        Path path = Paths.get(DATABASE_NAME);
-
         String data = duck.toString();
 
-        appendToFile(path, data + NEW_LINE);
+        appendToFile(this.DATABASE_NAME, data + NEW_LINE);
         return true;
     }
 
     public List<Duck> getAllDucks() throws IOException{
         List<Duck> result = new ArrayList<>();
-        Path path = Paths.get(DATABASE_NAME);
 
-        List<String> data = Files.readAllLines(path);
+        List<String> data = Files.readAllLines(this.DATABASE_NAME);
 
         for(String line: data){
             String[] words = line.split(", ");
