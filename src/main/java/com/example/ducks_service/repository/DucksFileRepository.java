@@ -12,10 +12,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Component
-public class DucksRepository {
+public class DucksFileRepository {
     private static final String NEW_LINE = System.lineSeparator();
 
     private final Path DATABASE_NAME;
@@ -23,11 +22,11 @@ public class DucksRepository {
     private static final String imagePath = "ducks/images/";
     private static final String audioPath = "ducks/audio/";
 
-    public DucksRepository() {
+    public DucksFileRepository() {
         this.DATABASE_NAME = Paths.get("db.txt");  // Default
     }
 
-    public DucksRepository(Path databasePath) {
+    public DucksFileRepository(Path databasePath) {
         this.DATABASE_NAME = databasePath;
     }
 

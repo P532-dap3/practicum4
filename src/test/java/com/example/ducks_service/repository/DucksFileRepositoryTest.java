@@ -1,8 +1,6 @@
 package com.example.ducks_service.repository;
 
 import com.example.ducks_service.model.*;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -10,14 +8,13 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DucksRepositoryTest {
+public class DucksFileRepositoryTest {
 
-    private DucksRepository ducksRepository;
+    private DucksFileRepository ducksFileRepository;
 
     @TempDir
     Path tempDir;
@@ -26,21 +23,21 @@ public class DucksRepositoryTest {
     void setUp() throws IOException {
         Path databasePath = tempDir.resolve("db.txt");
         Files.createFile(databasePath);
-        ducksRepository = new DucksRepository(databasePath);
+        ducksFileRepository = new DucksFileRepository(databasePath);
     }
 
     @Test
     void testAddDuck_Success() throws IOException {
         Duck duck = new MallardDuck(1);
-        assertTrue(ducksRepository.addDuck(duck));
+        assertTrue(ducksFileRepository.addDuck(duck));
     }
 
     @Test
     void testAddDuck_Persisted() throws IOException {
         Duck duck = new RedheadDuck(2);
-        ducksRepository.addDuck(duck);
+        ducksFileRepository.addDuck(duck);
 
-        List<Duck> ducks = ducksRepository.getAllDucks();
+        List<Duck> ducks = ducksFileRepository.getAllDucks();
         assertEquals(1, ducks.size());
         assertEquals(2, ducks.get(0).getId());
     }
@@ -48,28 +45,28 @@ public class DucksRepositoryTest {
     @Test
     void testGetDuck_Found() throws IOException {
         Duck duck = new RubberDuck(3);
-        ducksRepository.addDuck(duck);
+        ducksFileRepository.addDuck(duck);
 
-        Duck retrievedDuck = ducksRepository.getDuck(3);
+        Duck retrievedDuck = ducksFileRepository.getDuck(3);
         assertNotNull(retrievedDuck);
         assertEquals(3, retrievedDuck.getId());
     }
 
     @Test
     void testGetAllDucks() throws IOException {
-        ducksRepository.addDuck(new MallardDuck(1));
-        ducksRepository.addDuck(new RedheadDuck(2));
+        ducksFileRepository.addDuck(new MallardDuck(1));
+        ducksFileRepository.addDuck(new RedheadDuck(2));
 
-        List<Duck> ducks = ducksRepository.getAllDucks();
+        List<Duck> ducks = ducksFileRepository.getAllDucks();
         assertEquals(2, ducks.size());
     }
 
     @Test
     void testSearch_ByType() throws IOException {
-        ducksRepository.addDuck(new MallardDuck(1));
-        ducksRepository.addDuck(new RedheadDuck(2));
+        ducksFileRepository.addDuck(new MallardDuck(1));
+        ducksFileRepository.addDuck(new RedheadDuck(2));
 
-        List<Duck> result = ducksRepository.search(Type.MALLARD);
+        List<Duck> result = ducksFileRepository.search(Type.MALLARD);
         assertEquals(1, result.size());
         assertEquals(Type.MALLARD, result.get(0).getType());
     }
